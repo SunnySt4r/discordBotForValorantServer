@@ -2,7 +2,6 @@ package com.github.SunnySt4r.discordBotForValorantServer;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.w3c.dom.events.Event;
 
 public class Bot {
     public Bot(DiscordApi api){
