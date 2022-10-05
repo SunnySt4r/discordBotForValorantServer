@@ -1,18 +1,13 @@
 package com.github.SunnySt4r.discordBotForValorantServer;
 
+import com.github.SunnySt4r.discordBotForValorantServer.Listeners.MyMessageCreateListener;
+import com.github.SunnySt4r.discordBotForValorantServer.Listeners.MyReactionListener;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.event.message.MessageCreateEvent;
 
 public class Bot {
     public Bot(DiscordApi api){
-        api.addMessageCreateListener(new MyListener());
-//        api.addMessageCreateListener(messageCreateEvent -> {
-//            System.out.println(messageCreateEvent.getMessageContent());
-//            switch (messageCreateEvent.getMessageContent()){
-//                case "!f" -> sendMessage1(messageCreateEvent);
-//                case "!a" -> sendMessage2(messageCreateEvent);
-//            }
-//        });
+        api.addMessageCreateListener(new MyMessageCreateListener());
+        api.addReactionAddListener(new MyReactionListener());
+        api.addReactionRemoveListener(new MyReactionListener());
     }
-
-    }
+}
