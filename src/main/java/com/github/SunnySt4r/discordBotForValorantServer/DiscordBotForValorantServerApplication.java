@@ -23,7 +23,7 @@ public class DiscordBotForValorantServerApplication {
 	public DiscordApi discordApi(){
 		String token = env.getProperty("TOKEN");
 		DiscordApi api = new DiscordApiBuilder().setToken(token)
-				.setAllNonPrivilegedIntents()
+				.setAllIntents()
 				.login()
 				.join();
 		new Bot(api);

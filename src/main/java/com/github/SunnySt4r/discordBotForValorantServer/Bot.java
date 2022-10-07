@@ -6,8 +6,10 @@ import org.javacord.api.DiscordApi;
 
 public class Bot {
     public Bot(DiscordApi api){
+        MyReactionListener myReactionListener = new MyReactionListener();
+
         api.addMessageCreateListener(new MyMessageCreateListener());
-        api.addReactionAddListener(new MyReactionListener());
-        api.addReactionRemoveListener(new MyReactionListener());
+        api.addReactionAddListener(myReactionListener);
+        api.addReactionRemoveListener(myReactionListener);
     }
 }
