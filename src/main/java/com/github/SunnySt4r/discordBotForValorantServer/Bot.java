@@ -10,6 +10,7 @@ public class Bot {
         MyReactionListener myReactionListener = new MyReactionListener();
 
         api.addMessageCreateListener(new MyMessageCreateListener());
+
         api.addReactionAddListener(myReactionListener);
         api.addReactionRemoveListener(myReactionListener);
         api.addServerVoiceChannelMemberJoinListener(new MyVoiceChannelListener());
