@@ -94,13 +94,13 @@ public class MyMessageCreateListener implements MessageCreateListener {
     }
 
     public Message findTeamCreateMessage(TextChannel channel, String text, ServerVoiceChannel voiceChannel){
-        String users = "";
+        StringBuilder users = new StringBuilder();
         for(User user:voiceChannel.getConnectedUsers()){
-            users += ":medal:" + " " + user.getNicknameMentionTag() + "\n";
+            users.append(":medal: ").append(user.getNicknameMentionTag()).append("\n");
         }
         findTeamText.setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()))
                 .setDescription(text)
-                .addField("Игроки:",users)
+                .addField("Игроки:", users.toString())
                 .addField("Присоединиться: ", "https://discord.gg/"
                         +voiceChannel.createInviteBuilder().create().join().getCode());
 
