@@ -3,6 +3,7 @@ package com.github.SunnySt4r.discordBotForValorantServer.Listeners;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -55,7 +56,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
             Message message = findTeamCreateMessage(
                     event.getChannel(),
                     event.getMessageContent(),
-                    voiceChannel.getConnectedUserIds().size()
+                    voiceChannel
             );
 
             voiceChannel.addServerVoiceChannelMemberJoinListener(joinEvent -> {
@@ -92,10 +93,16 @@ public class MyMessageCreateListener implements MessageCreateListener {
         }
     }
 
-    public Message findTeamCreateMessage(TextChannel channel, String text, int numberOfUserToNeed){
-
-        findTeamText.setTitle("Нужно еще " + (5 - numberOfUserToNeed))
-                .setDescription(text);
+    public Message findTeamCreateMessage(TextChannel channel, String text, ServerVoiceChannel voiceChannel){
+        String users = "";
+        for(User user:voiceChannel.getConnectedUsers()){
+            users += ":medal:" + " " + user.getNicknameMentionTag() + "\n";
+        }
+        findTeamText.setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()))
+                .setDescription(text)
+                .addField("Игроки:",users)
+                .addField("Присоединиться: ", "https://discord.gg/"
+                        +voiceChannel.createInviteBuilder().create().join().getCode());
 
         return new MessageBuilder()
                 .setEmbeds(findTeamText)
