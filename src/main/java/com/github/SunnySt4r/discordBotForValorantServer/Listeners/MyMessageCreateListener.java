@@ -3,7 +3,6 @@ package com.github.SunnySt4r.discordBotForValorantServer.Listeners;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -27,7 +26,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
         User user = event.getMessageAuthor().asUser().get();
         ServerTextChannel textChannel = event.getServerTextChannel().get();
         if(textChannel.getId() == 1027972406796627968L && !user.isYourself() && !user.isBot()){
-            findTeamCreateMessage(event);
+            findTeamCreateMessageHelper(event);
             event.getMessage().delete();
         }else if(textChannel.getId() == 722261581290930199L && !user.isYourself() && !user.isBot()){
             if(user.getId() == 694899865670647848L){
@@ -47,13 +46,13 @@ public class MyMessageCreateListener implements MessageCreateListener {
         user.openPrivateChannel().get().sendMessage("ЛОХ ПоЛуЧаЕтСя)");
     }
 
-    public void findTeamCreateMessage(MessageCreateEvent event){
+    public void findTeamCreateMessageHelper(MessageCreateEvent event){
         User user = event.getMessageAuthor().asUser().get();
 
         if(user.getConnectedVoiceChannel(event.getServer().get()).isPresent()){
             ServerVoiceChannel voiceChannel = user.getConnectedVoiceChannel(event.getServer().get()).get();
 
-            Message message = findTeamCreateMessage(
+            Message message = findTeamCreateMessageHelper(
                     event.getChannel(),
                     event.getMessageContent(),
                     voiceChannel
@@ -67,8 +66,16 @@ public class MyMessageCreateListener implements MessageCreateListener {
                         }
                     }, 30, TimeUnit.SECONDS);
                 }else{
+                    StringBuilder usersString = new StringBuilder();
+                    for(User users:voiceChannel.getConnectedUsers()){
+                        usersString.append(":medal: ").append(users.getNicknameMentionTag()).append("\n");
+                    }
                     message.createUpdater().setEmbed(findTeamText
                             .setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()))
+                            .removeAllFields()
+                            .addField("Игроки:", usersString.toString())
+                            .addField("Присоединиться: ", "https://discord.gg/"
+                                    +voiceChannel.createInviteBuilder().create().join().getCode())
                     ).applyChanges();
                 }
             });
@@ -77,8 +84,16 @@ public class MyMessageCreateListener implements MessageCreateListener {
                 if ((5 - voiceChannel.getConnectedUserIds().size()) == 5){
                     message.delete();
                 }else{
+                    StringBuilder usersString = new StringBuilder();
+                    for(User users:voiceChannel.getConnectedUsers()){
+                        usersString.append(":medal: ").append(users.getNicknameMentionTag()).append("\n");
+                    }
                     message.createUpdater().setEmbed(findTeamText
                             .setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()) + "игрока")
+                            .removeAllFields()
+                            .addField("Игроки:", usersString.toString())
+                            .addField("Присоединиться: ", "https://discord.gg/"
+                                    +voiceChannel.createInviteBuilder().create().join().getCode())
                     ).applyChanges();
                 }
             });
@@ -93,13 +108,14 @@ public class MyMessageCreateListener implements MessageCreateListener {
         }
     }
 
-    public Message findTeamCreateMessage(TextChannel channel, String text, ServerVoiceChannel voiceChannel){
+    public Message findTeamCreateMessageHelper(TextChannel channel, String text, ServerVoiceChannel voiceChannel){
         StringBuilder users = new StringBuilder();
         for(User user:voiceChannel.getConnectedUsers()){
             users.append(":medal: ").append(user.getNicknameMentionTag()).append("\n");
         }
         findTeamText.setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()))
                 .setDescription(text)
+                .removeAllFields()
                 .addField("Игроки:", users.toString())
                 .addField("Присоединиться: ", "https://discord.gg/"
                         +voiceChannel.createInviteBuilder().create().join().getCode());
