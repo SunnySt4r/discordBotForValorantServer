@@ -10,7 +10,7 @@ import org.javacord.api.listener.channel.server.voice.ServerVoiceChannelMemberJo
 public class MyVoiceChannelListener implements ServerVoiceChannelMemberJoinListener{
     @Override
     public void onServerVoiceChannelMemberJoin(ServerVoiceChannelMemberJoinEvent joinEvent) {
-        if(joinEvent.getChannel().getId() == 722261581290930200L){
+        if(joinEvent.getChannel().getId() == 1028687107914477678L){
             createVoiceChannel(joinEvent);
         }
     }
@@ -21,7 +21,7 @@ public class MyVoiceChannelListener implements ServerVoiceChannelMemberJoinListe
         ServerVoiceChannel channel = new ServerVoiceChannelBuilder(server)
                 .setName( "Team#" + (int) (Math.random()*1000))
                 .setUserlimit(5)
-                .setCategory(server.getChannelCategoryById(1027960474500870235L).get())
+                .setCategory(server.getChannelCategoryById(999107653802393680L).get())
                 .create()
                 .join();
 

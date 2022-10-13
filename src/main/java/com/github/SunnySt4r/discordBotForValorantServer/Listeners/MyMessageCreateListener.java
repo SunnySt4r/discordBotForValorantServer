@@ -25,7 +25,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
     public void onMessageCreate(MessageCreateEvent event) {
         User user = event.getMessageAuthor().asUser().get();
         ServerTextChannel textChannel = event.getServerTextChannel().get();
-        if(textChannel.getId() == 1027972406796627968L && !user.isYourself() && !user.isBot()){
+        if(textChannel.getId() == 1007064299694469180L && !user.isYourself() && !user.isBot()){
             findTeamStart(event);
             event.getMessage().delete();
         }else if(textChannel.getId() == 722261581290930199L && !user.isYourself() && !user.isBot()){

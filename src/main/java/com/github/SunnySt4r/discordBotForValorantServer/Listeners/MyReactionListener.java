@@ -9,16 +9,20 @@ import org.javacord.api.event.message.reaction.SingleReactionEvent;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 
+import java.util.HashMap;
+
 public class MyReactionListener implements ReactionAddListener, ReactionRemoveListener{
+
+    HashMap<Long, Long> roles = new HashMap<>() {{
+        put(1029641415610859530L, 1029642001278308422L); //omen
+        put(1029641447613411439L, 1029642204878217318L); //raze
+    }};
 
     @Override
     public void onReactionAdd(ReactionAddEvent addEvent) {
         Channel channel = addEvent.getChannel();
-        if(channel.getId() == 1027172565271199774L){
-            Server server = addEvent.getServer().get();
-            if(addEvent.getMessageId() == 1027173185789112412L){
-                useRole1(addEvent, server,true);
-            }
+        if(channel.getId() == 1029641373860765706L){
+            useRole(addEvent, true);
         }
     }
 
@@ -26,16 +30,14 @@ public class MyReactionListener implements ReactionAddListener, ReactionRemoveLi
     public void onReactionRemove(ReactionRemoveEvent removeEvent) {
         Channel channel = removeEvent.getChannel();
         if(channel.getId() == 1027172565271199774L){
-            Server server = removeEvent.getServer().get();
-            if(removeEvent.getMessageId() == 1027173185789112412L){
-                useRole1(removeEvent, server,false);
-            }
+            useRole(removeEvent,false);
         }
     }
 
-    public void useRole1(SingleReactionEvent event, Server server, boolean addOrRemove){
-        if(server.getRoleById(722350286072578048L).isPresent()){
-            Role role = server.getRoleById(722350286072578048L).get();
+    public void useRole(SingleReactionEvent event, boolean addOrRemove){
+        Server server = event.getServer().get();
+        if(server.getRoleById(roles.get(event.getMessageId())).isPresent()){
+            Role role = server.getRoleById(roles.get(event.getMessageId())).get();
             if(addOrRemove){
                 role.addUser(event.getUser().get());
             }else{
