@@ -29,7 +29,7 @@ public class MyReactionListener implements ReactionAddListener, ReactionRemoveLi
     @Override
     public void onReactionRemove(ReactionRemoveEvent removeEvent) {
         Channel channel = removeEvent.getChannel();
-        if(channel.getId() == 1027172565271199774L){
+        if(channel.getId() == 1029641373860765706L){
             useRole(removeEvent,false);
         }
     }
