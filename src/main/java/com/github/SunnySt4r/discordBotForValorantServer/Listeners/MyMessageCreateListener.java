@@ -28,22 +28,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
         if(textChannel.getId() == 1007064299694469180L && !user.isYourself() && !user.isBot()){
             findTeamStart(event);
             event.getMessage().delete();
-        }else if(textChannel.getId() == 722261581290930199L && !user.isYourself() && !user.isBot()){
-            if(user.getId() == 694899865670647848L){
-                try {
-                    messageForMatvey(event);
-                } catch (ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }else if(user.getId() == 282914050566914049L){
-                event.getChannel().sendMessage("Привет, хозяин.\nСпасибо, что создал меня.");
-            }
         }
-    }
-
-    private void messageForMatvey(MessageCreateEvent event) throws ExecutionException, InterruptedException {
-        User user = event.getMessageAuthor().asUser().get();
-        user.openPrivateChannel().get().sendMessage("ЛОХ ПоЛуЧаЕтСя)");
     }
 
     public void findTeamStart(MessageCreateEvent event){
