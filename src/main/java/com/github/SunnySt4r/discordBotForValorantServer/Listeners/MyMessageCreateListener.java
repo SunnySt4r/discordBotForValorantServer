@@ -12,7 +12,6 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 import java.awt.*;
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class MyMessageCreateListener implements MessageCreateListener {
@@ -25,7 +24,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
     public void onMessageCreate(MessageCreateEvent event) {
         User user = event.getMessageAuthor().asUser().get();
         ServerTextChannel textChannel = event.getServerTextChannel().get();
-        if(textChannel.getId() == 1007064299694469180L && !user.isYourself() && !user.isBot()){
+        if (textChannel.getId() == 1007064299694469180L && !user.isYourself() && !user.isBot()) {
             findTeamStart(event);
             event.getMessage().delete();
         }
@@ -42,6 +41,14 @@ public class MyMessageCreateListener implements MessageCreateListener {
                     event.getMessageContent(),
                     voiceChannel
             );
+
+            ServerTextChannel textChannel = event.getServerTextChannel().get();
+            textChannel.addMessageCreateListener(messageCreateEvent ->{
+               User user1 = messageCreateEvent.getMessageAuthor().asUser().get();
+               if(user1.getConnectedVoiceChannels().contains(voiceChannel)){
+                   message.delete();
+               }
+            });
 
             voiceChannel.addServerVoiceChannelMemberJoinListener(joinEvent -> {
                 if(5 - voiceChannel.getConnectedUserIds().size() == 0){
@@ -74,7 +81,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
     }
 
     public Message findTeamCreateMessage(TextChannel channel, String text, ServerVoiceChannel voiceChannel){
-        findTeamText.setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()))
+        findTeamText.setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size())  + " игрока")
                 .setDescription(text)
                 .removeAllFields()
                 .addField("Игроки:", usersToBeautifulString(voiceChannel))
@@ -97,7 +104,7 @@ public class MyMessageCreateListener implements MessageCreateListener {
 
     public void messageEdit(Message message, ServerVoiceChannel voiceChannel){
         message.createUpdater().setEmbed(findTeamText
-                .setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()) + "игрока")
+                .setTitle("Нужно еще " + (5 - voiceChannel.getConnectedUserIds().size()) + " игрока")
                 .removeAllFields()
                 .addField("Игроки:", usersToBeautifulString(voiceChannel))
                 .addField("Присоединиться: ", "https://discord.gg/"
